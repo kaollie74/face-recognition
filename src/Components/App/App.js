@@ -32,22 +32,26 @@ class App extends Component {
 
   state = {
     input: '',
+    imageUrl: '',
   }
 
   onInputChange = (event, propsName) => {
 
     console.log('in onInputChange', event.target.value)
     this.setState({
-      input: event.target.value
+      input: event.target.value,
     })
   }
 
   onSubmit = () => {
-    console.log('CLICK')
+    this.setState({
+      imageUrl: this.state.input
+    })
+   
 
     app.models.predict(
-      "a403429f2ddf4b49b307e318f00e528b", 
-      this.state.input)
+      Clarifai.FACE_DETECT_MODEL, 
+     this.state.input)
       .then(
       function (response) {
         // do something with response
