@@ -27,6 +27,14 @@ const particlesOptions = {
 
 class App extends Component {
 
+  state = {
+    input: '',
+  }
+
+  onInputChange = () => {
+    
+  }
+
   render() {
     return (
       <div>
