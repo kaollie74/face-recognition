@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
 
 // Import Components
-import Navigation from './Components/Navigation/Navigation';
-import Logo from './Components/Logo/Logo';
+import Navigation from '../Navigation/Navigation';
+import Logo from '../Logo/Logo';
+import ImageLinkForm from '../ImageLinkForm/ImageLinkForm';
+
+// Import Style sheet
 import './App.css';
 
 class App extends Component {
@@ -12,8 +15,8 @@ class App extends Component {
       <div>
         <Navigation />
         <Logo />
-        {/* <ImageLinkForm />
-        <FaceRecognition /> */}
+        <ImageLinkForm />
+        {/* <FaceRecognition /> */}
       </div>
     )
   }
