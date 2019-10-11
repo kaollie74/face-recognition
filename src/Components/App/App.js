@@ -37,9 +37,9 @@ class App extends Component {
   onInputChange = (event, propsName) => {
 
     console.log('in onInputChange', event.target.value)
-    // this.setState({
-    //   input: event.target.value
-    // })
+    this.setState({
+      input: event.target.value
+    })
   }
 
   onSubmit = () => {
@@ -47,7 +47,7 @@ class App extends Component {
 
     app.models.predict(
       "a403429f2ddf4b49b307e318f00e528b", 
-      "https://samples.clarifai.com/face-det.jpg")
+      this.state.input)
       .then(
       function (response) {
         // do something with response
@@ -73,7 +73,7 @@ class App extends Component {
           onInputChange={this.onInputChange}
           onSubmit={this.onSubmit}
         />
-        <FaceRecognition />
+        <FaceRecognition Image={this.state.input} />
       </div>
     )
   }
