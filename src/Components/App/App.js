@@ -10,6 +10,7 @@ import Rank from '../Rank/Rank';
 // Import Style sheet
 import './App.css';
 
+
 const particlesOptions = {
 
   particles: {
@@ -31,8 +32,12 @@ class App extends Component {
     input: '',
   }
 
-  onInputChange = () => {
-    
+  onInputChange = (event, propsName) => {
+
+    console.log('in onInputChange', event.target.value)
+    // this.setState({
+    //   input: event.target.value
+    // })
   }
 
   render() {
@@ -45,7 +50,9 @@ class App extends Component {
         <Navigation />
         <Logo />
         <Rank />
-        <ImageLinkForm />
+        <ImageLinkForm
+          onInputChange={this.onInputChange}
+        />
         {/* <FaceRecognition /> */}
       </div>
     )
