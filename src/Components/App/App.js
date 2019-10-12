@@ -55,7 +55,7 @@ class App extends Component {
       .then(
       function (response) {
         // do something with response
-        console.log(response);
+        console.log(response.outputs[0].data.regions[0].region_info.bounding_box);
       },
       function (err) {
         // there was an error
