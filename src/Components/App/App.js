@@ -7,8 +7,9 @@ import ImageLinkForm from '../ImageLinkForm/ImageLinkForm';
 import Rank from '../Rank/Rank';
 import FaceRecognition from '../FaceRecognition/FaceRecognition';
 import SignIn from '../SignIn/SignIn';
+import Register from '../Register/Register';
 import './App.css';
-import { isThisExpression } from '@babel/types';
+
 
 require('dotenv').config();
 const API_KEY = process.env.REACT_APP_IMAGE
@@ -39,13 +40,7 @@ class App extends Component {
     route: 'signin'
   }
 
-  onInputChange = (event, propsName) => {
 
-    console.log('in onInputChange', event.target.value)
-    this.setState({
-      input: event.target.value,
-    })
-  }
 
   calculateFaceLocation = (data) => {
     console.log('in face location')
@@ -67,6 +62,20 @@ class App extends Component {
     console.log('in displayFaceBox', box)
     this.setState({
       box: box,
+    })
+  }
+
+  onInputChange = (event, propsName) => {
+
+    console.log('in onInputChange', event.target.value)
+    this.setState({
+      input: event.target.value,
+    })
+  }
+
+  onRouteChange = (route) => {
+    this.setState({
+      route: route
     })
   }
 
@@ -98,10 +107,8 @@ class App extends Component {
           className='particles'
           params={particlesOptions}
         />
-        <Navigation />
-        {this.state.route === 'signin' ?
-          <SignIn />
-          :
+        <Navigation onRouteChange={this.onRouteChange} />
+        {this.state.route === 'home' ?
           <div>
             <Logo />
             <Rank />
@@ -114,6 +121,15 @@ class App extends Component {
               Box={this.state.box}
             />
           </div>
+          :
+            this.state.route === 'signin' ?
+          
+            <SignIn onRouteChange={this.onRouteChange} />
+            :
+            <Register />
+
+    
+
         }
 
       </div>
