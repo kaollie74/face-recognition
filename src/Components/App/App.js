@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import Particles from 'react-particles-js'
-import  Clarifai  from 'clarifai';
+import Clarifai from 'clarifai';
 import Navigation from '../Navigation/Navigation';
 import Logo from '../Logo/Logo';
 import ImageLinkForm from '../ImageLinkForm/ImageLinkForm';
 import Rank from '../Rank/Rank';
 import FaceRecognition from '../FaceRecognition/FaceRecognition';
+import SignIn from '../SignIn/SignIn';
 import './App.css';
+import { isThisExpression } from '@babel/types';
 
 require('dotenv').config();
 const API_KEY = process.env.REACT_APP_IMAGE
@@ -33,7 +35,8 @@ class App extends Component {
   state = {
     input: '',
     imageUrl: '',
-    box: {}
+    box: {},
+    route: 'signin'
   }
 
   onInputChange = (event, propsName) => {
@@ -44,28 +47,28 @@ class App extends Component {
     })
   }
 
-   calculateFaceLocation = (data) => {
-      console.log('in face location')
-     const face = data.outputs[0].data.regions[0].region_info.bounding_box
-     const image = document.getElementById('inputImage')
-     const width = Number(image.width)
-     const height= Number(image.height)
-     
-     return {
-       leftCol: face.left_col * width,
-       topRow: face.top_row * height,
-       rightCol: width - (face.right_col * width),
-       bottomRow: height - (face.bottom_row * height)
-     }
+  calculateFaceLocation = (data) => {
+    console.log('in face location')
+    const face = data.outputs[0].data.regions[0].region_info.bounding_box
+    const image = document.getElementById('inputImage')
+    const width = Number(image.width)
+    const height = Number(image.height)
 
-    } // end calculationFaceLocation
-
-    displayFaceBox = (box) => {
-      console.log('in displayFaceBox', box)
-      this.setState({
-        box: box,
-      })
+    return {
+      leftCol: face.left_col * width,
+      topRow: face.top_row * height,
+      rightCol: width - (face.right_col * width),
+      bottomRow: height - (face.bottom_row * height)
     }
+
+  } // end calculationFaceLocation
+
+  displayFaceBox = (box) => {
+    console.log('in displayFaceBox', box)
+    this.setState({
+      box: box,
+    })
+  }
 
   onSubmit = () => {
     this.setState({
@@ -73,39 +76,48 @@ class App extends Component {
     })
 
     app.models.predict(
-      Clarifai.FACE_DETECT_MODEL, 
-     this.state.input)
+      Clarifai.FACE_DETECT_MODEL,
+      this.state.input)
       .then(response => {
         // do something with response
         console.log(response.outputs[0].data.regions[0].region_info.bounding_box);
         this.displayFaceBox(this.calculateFaceLocation(response))
-      }) 
-      .catch (err => {
+      })
+      .catch(err => {
         // there was an error
         console.log(err)
       })
-    
+
   }
 
   render() {
     return (
+
       <div>
         <Particles
           className='particles'
           params={particlesOptions}
         />
         <Navigation />
-        <Logo />
-        <Rank />
-        <ImageLinkForm
-          onInputChange={this.onInputChange}
-          onSubmit={this.onSubmit}
-        />
-        <FaceRecognition 
-        Image={this.state.imageUrl} 
-        Box = {this.state.box}
-        />
+        {this.state.route === 'signin' ?
+          <SignIn />
+          :
+          <div>
+            <Logo />
+            <Rank />
+            <ImageLinkForm
+              onInputChange={this.onInputChange}
+              onSubmit={this.onSubmit}
+            />
+            <FaceRecognition
+              Image={this.state.imageUrl}
+              Box={this.state.box}
+            />
+          </div>
+        }
+
       </div>
+
     )
   }
 
