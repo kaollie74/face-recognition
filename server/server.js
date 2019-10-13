@@ -16,7 +16,7 @@ app.use(bodyParser.json());
 */
 
 const database = {
-  user: [ {
+  users: [ {
     id: '1',
     name: 'kyle',
     email: 'kyle.com',
@@ -37,7 +37,7 @@ const database = {
 }
 
 app.post('/signin', (req, res) => {
-  if(req.body.email === database.user[0]. email && req.body.password === database.user[0].password) {
+  if(req.body.email === database.users[0]. email && req.body.password === database.users[0].password) {
       res.json('success')
   } else {
     res.status(500).json('error logging in')
@@ -45,11 +45,29 @@ app.post('/signin', (req, res) => {
   
   console.log(req.body)
 })
+
+app.post('/register', (req,res) => {
+
+  const { email, password, name } = req.body
+
+  database.users.push({
+    id: '3',
+    name: name,
+    email: email,
+    password: password,
+    entries: 0,
+    joined: new Date()
+  })
+
+  res.status(200).json(database.users[database.users.length-1])
+
+  
+})
   
 
 
 app.get('/', (req, res) => {
-  res.send('this is working');
+  res.send(database.users);
 })
 
 app.listen(PORT, ()=> {
