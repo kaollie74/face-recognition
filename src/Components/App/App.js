@@ -41,8 +41,6 @@ class App extends Component {
     isSignedIn: false
   }
 
-
-
   calculateFaceLocation = (data) => {
     console.log('in face location')
     const face = data.outputs[0].data.regions[0].region_info.bounding_box
@@ -118,7 +116,10 @@ class App extends Component {
           className='particles'
           params={particlesOptions}
         />
-        <Navigation isSignedIn={isSignedIn} onRouteChange={this.onRouteChange} />
+        <Navigation
+          isSignedIn={isSignedIn}
+          onRouteChange={this.onRouteChange}
+        />
         {route === 'home' ?
           <div>
             <Logo />

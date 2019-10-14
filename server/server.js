@@ -2,11 +2,13 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 const bcrypt = require('bcrypt-nodejs');
+const cors = require('cors')
 
 const PORT = process.env.PORT || 5000
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(cors())
 
 /* 
     singin route = POST 
@@ -21,6 +23,7 @@ const database = {
     id: '1',
     name: 'kyle',
     email: 'kyle.com',
+    password: 'kyle',
     entries: 0,
     joined: new Date()
   },
@@ -28,6 +31,7 @@ const database = {
     id: '2',
     name: 'Jeep',
     email: 'jeep.com',
+    password: 'jeep',
     entries: 0,
     joined: new Date()
   }
@@ -71,24 +75,24 @@ app.get('/profile/:id', (req, res) => {
 
 // POST that checks if the user is registered and sign them in.
 app.post('/signin', (req, res) => {
+  console.log(req.body)
   const { password, email } = req.body
   // // Load hash from your password DB.
-  bcrypt.compare(password, hash, function (err, res) {
-    // res == true'
-    console.log('first guess', res);
-  });
-  bcrypt.compare('veggies', hash, function (err, res) {
-    // res = false
-    console.log('second guess', res)
-  });
+  // bcrypt.compare(password, hash, function (err, res) {
+  //   // res == true'
+  //   console.log('first guess', res);
+  // });
+  // bcrypt.compare('veggies', hash, function (err, res) {
+  //   // res = false
+  //   console.log('second guess', res)
+  // });
 
-  if (req.body.email === database.users[0].email && req.body.password === database.users[0].password) {
+  if (email === database.users[0].email && password === database.users[0].password) {
     res.json('success')
   } else {
     res.status(500).json('error logging in')
   }
 
-  console.log(req.body)
 })
 
 // POST when new user registers
