@@ -21,7 +21,7 @@ class SignIn extends Component {
   }
 
   onSubmitSignIn = () => {
-
+    //  LONGER VERSION OF WRITING AXIOS POST
     // Axios({
     //   method: 'POST',
     //   url: '/signin',
@@ -40,6 +40,7 @@ class SignIn extends Component {
     //   alert('Email and or username not accurate. Please try again')
     // })
 
+    // SHORTER VERSION OF AXIOS POST
     Axios.post('/signin', this.state)
       .then(response => {
         console.log(response.data);
@@ -54,7 +55,8 @@ class SignIn extends Component {
         }
 
       })
-
+      // WRITTING POST WITH FETCH METHOD BY SENDING IT
+      // TO THE LOCALHOST THAT THE SERVER IS RUNNING ON
     // fetch('http://localhost:5000/signin', {
     //   method: 'post',
     //   headers: {
