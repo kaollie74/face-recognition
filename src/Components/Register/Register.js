@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Axios from 'axios';
 
 class Register extends Component {
 
@@ -17,9 +18,18 @@ class Register extends Component {
     })
   }
 
-  onSubmit = () => {
+  onSubmitRegister = () => {
     console.log('in onSubmit')
      //this.props.onRouteChange('home')}
+     Axios.post('/register', this.state)
+     .then(response => {
+       console.log(response.data)
+       this.setState({
+         name: '',
+         email: '',
+         password:'',
+       })
+     })
   }
 
   render() {
@@ -28,6 +38,7 @@ class Register extends Component {
     // destructuring so onRouteChange can be written
     // as 'onRouteChange' instead of 'this.props.onRouteChange 
     const { onRouteChange } = this.props;
+    const { name , email, password } = this.state
     return (
 
       <article className="br3 ba dark-gray b--black-10 mv4 w-100 w-50-m w-25-l mw6 shadow-5 center">
@@ -44,6 +55,7 @@ class Register extends Component {
                   onChange={(event) => this.onEventChange(event, 'name')}
                   className="pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100"
                   type="text" name="name" id="name"
+                  value={name}
                 />
               </div>
               {/************************************* EMAIL INPUT **********************************************/}
@@ -56,6 +68,7 @@ class Register extends Component {
                   type="email"
                   name="email-address"
                   id="email-address"
+                  value = {email}
                 />
               </div>
               {/************************************* PASSWORD INPUT **********************************************/}
@@ -67,6 +80,7 @@ class Register extends Component {
                   type="password"
                   name="password"
                   id="password"
+                  value = {password}
                 />
               </div>
 
@@ -74,7 +88,7 @@ class Register extends Component {
             {/************************************* REGISTER BUTTON **********************************************/}
             <div className="center">
               <input
-                onClick= {this.onSubmit}
+                onClick= {this.onSubmitRegister}
                 className="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 dib"
                 type="submit"
                 value="Register"
