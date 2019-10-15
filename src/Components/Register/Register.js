@@ -20,25 +20,45 @@ class Register extends Component {
 
   onSubmitRegister = () => {
     console.log('in onSubmit')
-     //this.props.onRouteChange('home')}
-     Axios.post('/register', this.state)
-     .then(response => {
-       console.log(response.data)
-       this.setState({
-         name: '',
-         email: '',
-         password:'',
-       })
-     })
-  }
+    //this.props.onRouteChange('home')}
+    Axios.post('/register', this.state)
+      .then(response => {
+        console.log(response.data)
+        this.props.loadUser(response.data)
+        this.setState({
+          name: '',
+          email: '',
+          password: '',
+        }) // end setState
+      }) // end .then
+
+    // fetch('http://localhost:5000/register', {
+    //   method: 'post',
+    //   headers: {'Content-Type': 'application/json'},
+    //   body: JSON.stringify({
+    //     name: this.state.name,
+    //     email: this.state.email,
+    //     password: this.state.password
+    //   }) // end body 
+    // }) // end fetch
+    // .then(response => {
+    //   response.json()
+    // })
+    // .then( user=> {
+    //   if(user) {
+    //   this.props.loadUser(user)
+    //   console.log(user)
+    //   }
+    // })// end .then
+
+  } // end onSubmitRegister
 
   render() {
 
     console.log('this is state', this.state)
     // destructuring so onRouteChange can be written
     // as 'onRouteChange' instead of 'this.props.onRouteChange 
-    const { onRouteChange } = this.props;
-    const { name , email, password } = this.state
+    const { name, email, password } = this.state
     return (
 
       <article className="br3 ba dark-gray b--black-10 mv4 w-100 w-50-m w-25-l mw6 shadow-5 center">
@@ -68,7 +88,7 @@ class Register extends Component {
                   type="email"
                   name="email-address"
                   id="email-address"
-                  value = {email}
+                  value={email}
                 />
               </div>
               {/************************************* PASSWORD INPUT **********************************************/}
@@ -80,7 +100,7 @@ class Register extends Component {
                   type="password"
                   name="password"
                   id="password"
-                  value = {password}
+                  value={password}
                 />
               </div>
 
@@ -88,7 +108,7 @@ class Register extends Component {
             {/************************************* REGISTER BUTTON **********************************************/}
             <div className="center">
               <input
-                onClick= {this.onSubmitRegister}
+                onClick={this.onSubmitRegister}
                 className="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 dib"
                 type="submit"
                 value="Register"
