@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Axios from 'axios';;
 
 class SignIn extends Component {
 
@@ -21,25 +22,58 @@ class SignIn extends Component {
 
   onSubmitSignIn = () => {
 
-    fetch('http://localhost:5000/signin', {
-      method: 'post',
-      headers: {
-        'Content-type': 'application/json'
-      },
-      body: JSON.stringify({
-        email: this.state.email,
-        password: this.state.password
-      }) // end body
-        }) // end fetch  
-         .then(response =>
-          response.json()
-        )
-        .then(data => {
-          if (data === 'success') {
-            this.props.onRouteChange('home')
-          }
+    // Axios({
+    //   method: 'POST',
+    //   url: '/signin',
+    //   data: {
+    //     email: this.state.email,
+    //     password: this.state.password
+    //   }
+    // })
+    // .then( response => {
+    //   console.log(response.data)
+    //     if( response.data === 'success'){
+    //       this.props.onRouteChange('home')
+    //     }
+    // }).catch(error => {
+    //   console.log(error)
+    //   alert('Email and or username not accurate. Please try again')
+    // })
 
-    }) // .then
+    Axios.post('/signin', this.state)
+      .then(response => {
+        console.log(response.data);
+        if (response.data === 'success') {
+          this.props.onRouteChange('home');
+        } else {
+          alert('email or password is incorrect, try again')
+          this.setState({
+            email: '',
+            password: '',
+          })
+        }
+
+      })
+
+    // fetch('http://localhost:5000/signin', {
+    //   method: 'post',
+    //   headers: {
+    //     'Content-type': 'application/json'
+    //   },
+    //   body: JSON.stringify({
+    //     email: this.state.email,
+    //     password: this.state.password
+    //   }) // end body
+    //     }) // end fetch  
+    //      .then(response =>
+    //       response.json()
+    //     )
+    //     .then(data => {
+    //       if (data === 'success') {
+    //         this.props.onRouteChange('home')
+    //       }
+
+    // }) // .then
 
 
   }
@@ -66,6 +100,7 @@ class SignIn extends Component {
                   type="email"
                   name="email-address"
                   id="email-address"
+                  value={this.state.email}
                 />
               </div>
               <div className="mv3">
@@ -81,6 +116,7 @@ class SignIn extends Component {
                   type="password"
                   name="password"
                   id="password"
+                  value={this.state.password}
                 />
               </div>
 
