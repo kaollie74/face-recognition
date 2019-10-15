@@ -99,6 +99,7 @@ app.post('/signin', (req, res) => {
 // POST when new user registers
 app.post('/register', (req, res) => {
 
+  // destructuring req.body values
   const { email, password, name } = req.body
 
   bcrypt.hash(password, null, null, function (err, hash) {
@@ -106,7 +107,7 @@ app.post('/register', (req, res) => {
     console.log(hash)
   });
 
-  // add a new user by adding the .push() method
+  // add a new user by using the .push() method
   database.users.push({
     id: '3',
     name: name,
@@ -115,7 +116,8 @@ app.post('/register', (req, res) => {
     entries: 0,
     joined: new Date()
   })
-
+  // send back status 200 and the object of the new user
+  
   res.status(200).json(database.users[database.users.length - 1])
 
 

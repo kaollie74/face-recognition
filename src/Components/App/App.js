@@ -38,9 +38,20 @@ class App extends Component {
     imageUrl: '',
     box: {},
     route: 'signin',
-    isSignedIn: false
+    isSignedIn: false,
+    user: {
+      id: '',
+      name: '',
+      email: '',
+      entries: '',
+      joined: new Date()
+    }
   }
 
+  // Takes data from API sets each value to a variable.
+  // grabs the element id from the current image loaded
+  // mathematical decides which value will postion itself around the face.
+  // and returns values for css to display border around face.
   calculateFaceLocation = (data) => {
     console.log('in face location')
     const face = data.outputs[0].data.regions[0].region_info.bounding_box
@@ -62,6 +73,19 @@ class App extends Component {
     this.setState({
       box: box,
     })
+  }
+
+  loadUser = (user) => {
+
+    console.log('in load user', user)
+    this.setState({
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      entries: user.entries,
+      joined: user.date
+    })
+
   }
 
   onInputChange = (event, propsName) => {
@@ -138,7 +162,10 @@ class App extends Component {
 
             <SignIn onRouteChange={this.onRouteChange} />
             :
-            <Register onRouteChange={this.onRouteChange} />
+            <Register
+              onRouteChange={this.onRouteChange}
+              loadUser={this.loadUser}
+            />
 
 
 
