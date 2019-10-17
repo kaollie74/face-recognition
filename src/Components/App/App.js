@@ -9,6 +9,7 @@ import FaceRecognition from '../FaceRecognition/FaceRecognition';
 import SignIn from '../SignIn/SignIn';
 import Register from '../Register/Register';
 import './App.css';
+import Axios from 'axios';
 
 
 require('dotenv').config();
@@ -112,7 +113,7 @@ class App extends Component {
 
   }// end onRouteChange
 
-  onSubmit = () => {
+  onPictureSubmit = () => {
     this.setState({
       imageUrl: this.state.input
     })
@@ -121,10 +122,22 @@ class App extends Component {
       Clarifai.FACE_DETECT_MODEL,
       this.state.input)
       .then(response => {
-        // do something with response
-        console.log(response.outputs[0].data.regions[0].region_info.bounding_box);
+        //console.log(response.outputs[0].data.regions[0].region_info.bounding_box);
+        if(response) {
+          console.log( this.state.user.id )
+          Axios.put('/image',  this.state.user )
+          .then( response => {
+            this.setState({
+              user : {
+                ...this.state.user,
+                entries: response.data,
+              }// end user
+            }) // end setState
+          }) // end .then
+        }
         this.displayFaceBox(this.calculateFaceLocation(response))
-      })
+      }) // .then
+      
       .catch(err => {
         // there was an error
         console.log(err)
@@ -156,7 +169,7 @@ class App extends Component {
             />
             <ImageLinkForm
               onInputChange={this.onInputChange}
-              onSubmit={this.onSubmit}
+              onPictureSubmit={this.onPictureSubmit}
             />
             <FaceRecognition
               Image={imageUrl}
