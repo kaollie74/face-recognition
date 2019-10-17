@@ -9,58 +9,23 @@ const PORT = process.env
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use(cors())
+app.use(cors());
 
-/* 
-    singin route = POST 
-    register route = POST = return user object
-    /profile/:userid = GET = user
-    /image = PUT = updated user object
-
-*/
-
-const database = {
-  users: [{
-    id: 1,
-    name: 'kyle',
-    email: 'kyle.com',
-    password: 'kyle',
-    entries: 0,
-    joined: new Date()
-  },
-  {
-    id: '2',
-    name: 'Jeep',
-    email: 'jeep.com',
-    password: 'jeep',
-    entries: 0,
-    joined: new Date()
-  }
-  ],
-  login: [
-    {
-      id: '1',
-      hash: '',
-      email: 'kyle.com'
-    }
-  ]
-
-}
-
-knex.select('*').from('users').then(data => {
-  console.log(data);
-});
-
+// get user based on id
 app.get('/profile/:id', (req, res) => {
   console.log(`hit /profile/${req.params.id}`)
   const { id } = req.params;
-  let found = false;
+
   knex.select('*')
     .from('users')
     .where({ id: id })
     .then(response => {
+      if (response.length) {
         //res.json(response[0]);
-        res.send(response[0]) 
+        res.send(response[0])
+      } else {
+        res.status(500, 'no user').json(`No User`)
+      } 
     })
     .catch( error => {
       res.sendStatus(500)
@@ -148,24 +113,21 @@ app.post('/register', (req, res) => {
 })
 
 app.put('/image', (req, res) => {
-  console.log('in /image', req.body)
+  console.log('in /image', req.body.id)
   // const { id } = req.body;
-  let found = false;
-
-  database.users.forEach(user => {
-    if (user.id === req.body.id) {
-      found = true;
-      user.entries++
-      return res.json(user.entries)
-
-    } // end if 
-
-  }) // end forEach
-
-  if (!found) {
-    res.status(400).json('not found')
-  } // END if 
-
+  knex('users')
+  .where({
+    id: req.body.id
+  })
+  .increment('entries', 1)
+  .returning('entries')
+  .then(response => {
+    res.send(response[0])
+  })
+  .catch(error => {
+    res.sendStatus(500)
+    
+  })
 
 }) // END OF APP.PUT '/image'
 
