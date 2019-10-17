@@ -20,7 +20,7 @@ app.use(cors())
 
 const database = {
   users: [{
-    id: '1',
+    id: 1,
     name: 'kyle',
     email: 'kyle.com',
     password: 'kyle',
@@ -123,12 +123,12 @@ app.post('/register', (req, res) => {
 })
 
 app.put('/image', (req, res) => {
-
-  const { id } = req.body;
+  console.log('in /image', req.body)
+  // const { id } = req.body;
   let found = false;
 
   database.users.forEach(user => {
-    if (user.id === id) {
+    if (user.id === req.body.id) {
       found = true;
       user.entries++
       return res.json(user.entries)
