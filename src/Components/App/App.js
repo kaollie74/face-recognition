@@ -75,15 +75,18 @@ class App extends Component {
     })
   }
 
-  loadUser = (user) => {
-
-    console.log('in load user', user)
+  // update the state with the user information we 
+  // recieve from the server
+  loadUser = (data) => {
+    console.log('in load user', data)
     this.setState({
-      id: user.id,
-      name: user.name,
-      email: user.email,
-      entries: user.entries,
-      joined: user.date
+      user: {
+      id: data.id,
+      name: data.name,
+      email: data.email,
+      entries: data.entries,
+      joined: data.joined
+      }
     })
 
   }
@@ -130,8 +133,8 @@ class App extends Component {
   }
 
   render() {
-
-    const { isSignedIn, imageUrl, route, box } = this.state;
+    console.log('this is state in App.js', this.state)
+    const { isSignedIn, imageUrl, route, box} = this.state;
 
     return (
 
@@ -147,7 +150,10 @@ class App extends Component {
         {route === 'home' ?
           <div>
             <Logo />
-            <Rank />
+            <Rank
+              name={this.state.user.name}
+              entries={this.state.user.entries}
+            />
             <ImageLinkForm
               onInputChange={this.onInputChange}
               onSubmit={this.onSubmit}
@@ -160,7 +166,10 @@ class App extends Component {
           :
           this.state.route === 'signin' ?
 
-            <SignIn onRouteChange={this.onRouteChange} />
+            <SignIn 
+            onRouteChange={this.onRouteChange} 
+            loadUser={this.loadUser}
+            />
             :
             <Register
               onRouteChange={this.onRouteChange}
