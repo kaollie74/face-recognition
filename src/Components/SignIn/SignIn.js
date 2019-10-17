@@ -43,8 +43,9 @@ class SignIn extends Component {
     // SHORTER VERSION OF AXIOS POST
     Axios.post('/signin', this.state)
       .then(response => {
-        console.log(response.data);
-        if (response.data === 'success') {
+        console.log(response.data.id);
+        if (response.data.id) {
+          this.props.loadUser(response.data)
           this.props.onRouteChange('home');
         } else {
           alert('email or password is incorrect, try again')

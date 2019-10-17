@@ -19,43 +19,43 @@ class Register extends Component {
   }
 
   onSubmitRegister = () => {
-    console.log('in onSubmit')
-    //this.props.onRouteChange('home')}
-    Axios.post('/register', this.state)
-      .then(response => {
-        console.log(response.data)
-        this.props.loadUser(response.data)
-        this.setState({
-          name: '',
-          email: '',
-          password: '',
-        }) // end setState
-      }) // end .then
+    console.log('in onSubmitRegister')
+   
+    // Axios.post('/register', this.state)
+    //   .then(response => {
 
-    // fetch('http://localhost:5000/register', {
-    //   method: 'post',
-    //   headers: {'Content-Type': 'application/json'},
-    //   body: JSON.stringify({
-    //     name: this.state.name,
-    //     email: this.state.email,
-    //     password: this.state.password
-    //   }) // end body 
-    // }) // end fetch
-    // .then(response => {
-    //   response.json()
-    // })
-    // .then( user=> {
-    //   if(user) {
-    //   this.props.loadUser(user)
-    //   console.log(user)
-    //   }
-    // })// end .then
+    //     console.log(response.data)
+    //     if (response.data) {
+    //       this.props.loadUser(response.data)
+    //       this.props.onRouteChange('home');
+    //     }
+    //   }) // end .then
+
+    fetch('http://localhost:5000/register', {
+      method: 'post',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        name: this.state.name,
+        email: this.state.email,
+        password: this.state.password
+      }) // end body 
+    }) // end fetch
+    .then(response => {
+     response.json()
+    })
+    .then( users => {
+      console.log(users)
+      if(users) {
+      this.props.loadUser(users)
+      this.props.onRouteChange('home')
+      }
+    })// end .then
 
   } // end onSubmitRegister
 
   render() {
 
-    console.log('this is state', this.state)
+   
     // destructuring so onRouteChange can be written
     // as 'onRouteChange' instead of 'this.props.onRouteChange 
     const { name, email, password } = this.state
