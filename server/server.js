@@ -3,8 +3,9 @@ const app = express();
 const bodyParser = require('body-parser');
 const bcrypt = require('bcrypt-nodejs');
 const cors = require('cors')
-
-const PORT = process.env.PORT || 5000
+const knex = require('./modules/pool');
+const PORT = process.env
+  .PORT || 5000
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -46,20 +47,29 @@ const database = {
 
 }
 
+knex.select('*').from('users').then(data => {
+  console.log(data);
+});
+
 app.get('/profile/:id', (req, res) => {
   console.log(`hit /profile/${req.params.id}`)
   const { id } = req.params;
   let found = false;
-  database.users.forEach(user => {
-    if (user.id === id) {
-      found = true;
-      return res.json(user)
-    }
+  knex.select('*')
+    .from('users')
+    .where({ id: id })
+    .then(response => {
+        //res.json(response[0]);
+        res.send(response[0]) 
+    })
+    .catch( error => {
+      res.sendStatus(500)
+      console.log(`error from DB`);
+    })
 
-  })
-  if (!found) {
-    res.status(400).json('not found')
-  }
+  // if (!found) {
+  //   res.status(400).json('not found')
+  // }
 
   // WAY NUMBER 2 OF LOOPING THROUGH OBJECT ARRAY
   // AND RETURNING USER.
@@ -102,22 +112,37 @@ app.post('/register', (req, res) => {
   // destructuring req.body values
   const { email, password, name } = req.body
 
+  knex('users')
+    .returning('*')
+    .insert({
+      email: email,
+      name: name,
+      joined: new Date()
+    })
+    .then(response => {
+      //res.status(200).json(database.users[database.users.length - 1])
+      res.json(response[0])
+    })
+    .catch(error => {
+      res.status(500)
+        .json(`unable to register`)
+    })
   bcrypt.hash(password, null, null, function (err, hash) {
     // Store hash in your password DB.
     console.log(hash)
   });
 
   // add a new user by using the .push() method
-  database.users.push({
-    id: '3',
-    name: name,
-    email: email,
-    entries: 0,
-    joined: new Date()
-  })
+  // database.users.push({
+  //   id: '3',
+  //   name: name,
+  //   email: email,
+  //   entries: 0,
+  //   joined: new Date()
+  // })
   // send back status 200 and the object of the new user
-  
-  res.status(200).json(database.users[database.users.length - 1])
+
+
 
 
 })
