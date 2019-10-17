@@ -21,35 +21,36 @@ class Register extends Component {
   onSubmitRegister = () => {
     console.log('in onSubmitRegister')
    
-    // Axios.post('/register', this.state)
-    //   .then(response => {
+    Axios.post('/register', this.state)
+      .then(response => {
 
-    //     console.log(response.data)
-    //     if (response.data) {
-    //       this.props.loadUser(response.data)
-    //       this.props.onRouteChange('home');
-    //     }
-    //   }) // end .then
+        console.log(response.data)
+        if (response.data) {
 
-    fetch('http://localhost:5000/register', {
-      method: 'post',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({
-        name: this.state.name,
-        email: this.state.email,
-        password: this.state.password
-      }) // end body 
-    }) // end fetch
-    .then(response => {
-     response.json()
-    })
-    .then( users => {
-      console.log(users)
-      if(users) {
-      this.props.loadUser(users)
-      this.props.onRouteChange('home')
-      }
-    })// end .then
+          this.props.loadUser(response.data)
+          this.props.onRouteChange('home');
+        }
+      }) // end .then
+
+    // fetch('http://localhost:5000/register', {
+    //   method: 'post',
+    //   headers: {'Content-Type': 'application/json'},
+    //   body: JSON.stringify({
+    //     name: this.state.name,
+    //     email: this.state.email,
+    //     password: this.state.password
+    //   }) // end body 
+    // }) // end fetch
+    // .then(response => 
+    //  response.json()
+    // )
+    // .then( users => {
+    //   console.log(users)
+    //   if(users) {
+    //   this.props.loadUser(users)
+    //   this.props.onRouteChange('home')
+    //   }
+    // })// end .then
 
   } // end onSubmitRegister
 
