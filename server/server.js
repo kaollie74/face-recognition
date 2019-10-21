@@ -4,8 +4,7 @@ const bodyParser = require('body-parser');
 const bcrypt = require('bcrypt-nodejs');
 const cors = require('cors')
 const knex = require('./modules/pool');
-const PORT = process.env
-  .PORT || 5000
+const PORT = process.env.PORT || 5000;
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -25,9 +24,9 @@ app.get('/profile/:id', (req, res) => {
         res.send(response[0])
       } else {
         res.status(500, 'no user').json(`No User`)
-      } 
+      }
     })
-    .catch( error => {
+    .catch(error => {
       res.sendStatus(500)
       console.log(`error from DB`);
     })
@@ -50,48 +49,67 @@ app.get('/profile/:id', (req, res) => {
 
 // POST that checks if the user is registered and sign them in.
 app.post('/signin', (req, res) => {
-  console.log(req.body)
+  //console.log(req.body)
   const { password, email } = req.body
-  // // Load hash from your password DB.
-  // bcrypt.compare(password, hash, function (err, res) {
-  //   // res == true'
-  //   console.log('first guess', res);
-  // });
-  // bcrypt.compare('veggies', hash, function (err, res) {
-  //   // res = false
-  //   console.log('second guess', res)
-  // });
+  knex.select('email', 'password')
+    .from('login')
+    .where('email', '=', email)
+    .then(response => {
+      console.log(response[0].password)
+      const Valid = bcrypt.compareSync(password, response[0].password)
+      if (Valid) {
+        knex.select('*')
+          .from('users')
+          .where('email', '=', email)
+          .then(response => {
+            res.send(response[0])
+          }) //  end .then
+          .catch(error => {
+            res.sendStatus(500);
+            console.log(`error`)
+          }) // end .catch
+      } // end if 
+    }) // end .then
+    .catch( error => {
+      res.status(500).json('wrong credentials')
+    })
 
-  if (email === database.users[0].email && password === database.users[0].password) {
-    res.json(database.users[0])
-  } else {
-    //res.status(500).json('error logging in')
-    res.send('incorrect password')
-  }
 
-})
+}) // end POST /signin
 
 // POST when new user registers
 app.post('/register', (req, res) => {
 
   // destructuring req.body values
   const { email, password, name } = req.body
+  const hash = bcrypt.hashSync(password)
+  // run transaction function which inserts password and email into 
+  // table then returns email to insert into login table.
+  // if one fails, it all fails. 
+  knex.transaction(trx => {
+    trx.insert({
+      password: hash,
+      email: email
+    })
+      .into('login')
+      .returning('email')
+      .then(loginEmail => {
+        return trx('users')
+          .returning('*')
+          .insert({
+            email: loginEmail[0],
+            name: name,
+            joined: new Date()
+          })
+          .then(response => {
+            //res.status(200).json(database.users[database.users.length - 1])
+            res.json(response[0])
+          })
+      })
+      .then(trx.commit)
+      .catch(trx.rollback)
+  })
 
-  knex('users')
-    .returning('*')
-    .insert({
-      email: email,
-      name: name,
-      joined: new Date()
-    })
-    .then(response => {
-      //res.status(200).json(database.users[database.users.length - 1])
-      res.json(response[0])
-    })
-    .catch(error => {
-      res.status(500)
-        .json(`unable to register`)
-    })
   bcrypt.hash(password, null, null, function (err, hash) {
     // Store hash in your password DB.
     console.log(hash)
@@ -116,29 +134,25 @@ app.put('/image', (req, res) => {
   console.log('in /image', req.body.id)
   // const { id } = req.body;
   knex('users')
-  .where({
-    id: req.body.id
-  })
-  .increment('entries', 1)
-  .returning('entries')
-  .then(response => {
-    res.send(response[0])
-  })
-  .catch(error => {
-    res.sendStatus(500)
-    
-  })
+    .where({
+      id: req.body.id
+    })
+    .increment('entries', 1)
+    .returning('entries')
+    .then(response => {
+      res.send(response[0])
+    })
+    .catch(error => {
+      res.sendStatus(500)
+
+    })
 
 }) // END OF APP.PUT '/image'
 
 
 
 
-
-app.get('/', (req, res) => {
-  res.send(database.users);
-})
-
+// server is listening on localhost: 5000
 app.listen(PORT, () => {
   console.log('app is running on port 5000')
 })

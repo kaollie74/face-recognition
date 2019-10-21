@@ -71,6 +71,7 @@ class App extends Component {
 
   displayFaceBox = (box) => {
     console.log('in displayFaceBox', box)
+     
     this.setState({
       box: box,
     })
@@ -91,18 +92,19 @@ class App extends Component {
     })
 
   }
-
+  // when user enters url address to picture
+  // the function activates and setState to the value
   onInputChange = (event, propsName) => {
 
     console.log('in onInputChange', event.target.value)
     this.setState({
-      input: event.target.value,
+      [propsName]: event.target.value,
     })
   }
 
   onRouteChange = (route) => {
-    if (route === 'signedout') {
-      this.setState({ isSignedIn: false })
+    if (route === 'signin') {
+      this.setState({ ...this.state, isSignedIn: false, imageUrl: '' })
     } else if (route === 'home') {
       this.setState({ isSignedIn: true })
     }
@@ -147,7 +149,7 @@ class App extends Component {
 
   render() {
     console.log('this is state in App.js', this.state)
-    const { isSignedIn, imageUrl, route, box} = this.state;
+    const { isSignedIn, imageUrl, route, box, input} = this.state;
 
     return (
 
@@ -172,7 +174,7 @@ class App extends Component {
               onPictureSubmit={this.onPictureSubmit}
             />
             <FaceRecognition
-              Image={imageUrl}
+              Image={input}
               Box={box}
             />
           </div>

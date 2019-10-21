@@ -21,33 +21,17 @@ class SignIn extends Component {
   }
 
   onSubmitSignIn = () => {
-    //  LONGER VERSION OF WRITING AXIOS POST
-    // Axios({
-    //   method: 'POST',
-    //   url: '/signin',
-    //   data: {
-    //     email: this.state.email,
-    //     password: this.state.password
-    //   }
-    // })
-    // .then( response => {
-    //   console.log(response.data)
-    //     if( response.data === 'success'){
-    //       this.props.onRouteChange('home')
-    //     }
-    // }).catch(error => {
-    //   console.log(error)
-    //   alert('Email and or username not accurate. Please try again')
-    // })
 
     // SHORTER VERSION OF AXIOS POST
     Axios.post('/signin', this.state)
       .then(response => {
-        console.log(response.data.id);
-        if (response.data.id) {
+        console.log(response.data);
+        if (response.data.id ) {
+
           this.props.loadUser(response.data)
           this.props.onRouteChange('home');
-        } else {
+
+        } else if (response.data === 'error logging in') {
           alert('email or password is incorrect, try again')
           this.setState({
             email: '',
@@ -56,29 +40,7 @@ class SignIn extends Component {
         }
 
       })
-      // WRITTING POST WITH FETCH METHOD BY SENDING IT
-      // TO THE LOCALHOST THAT THE SERVER IS RUNNING ON
-    // fetch('http://localhost:5000/signin', {
-    //   method: 'post',
-    //   headers: {
-    //     'Content-type': 'application/json'
-    //   },
-    //   body: JSON.stringify({
-    //     email: this.state.email,
-    //     password: this.state.password
-    //   }) // end body
-    //     }) // end fetch  
-    //      .then(response =>
-    //       response.json()
-    //     )
-    //     .then(data => {
-    //       if (data === 'success') {
-    //         this.props.onRouteChange('home')
-    //       }
-
-    // }) // .then
-
-
+  
   }
 
   render() {
