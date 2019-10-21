@@ -31,23 +31,27 @@ const particlesOptions = {
   }
 }
 
+const initialState =  {
+  input: '',
+  imageUrl: '',
+  box: {},
+  route: 'signin',
+  isSignedIn: false,
+  user: {
+    id: '',
+    name: '',
+    email: '',
+    entries: '',
+    joined: new Date()
+  }
+}
+
 
 class App extends Component {
 
-  state = {
-    input: '',
-    imageUrl: '',
-    box: {},
-    route: 'signin',
-    isSignedIn: false,
-    user: {
-      id: '',
-      name: '',
-      email: '',
-      entries: '',
-      joined: new Date()
-    }
-  }
+  
+
+  state = initialState;
 
   // Takes data from API sets each value to a variable.
   // grabs the element id from the current image loaded
@@ -104,7 +108,7 @@ class App extends Component {
 
   onRouteChange = (route) => {
     if (route === 'signin') {
-      this.setState({ ...this.state, isSignedIn: false, imageUrl: '' })
+      this.setState(initialState)
     } else if (route === 'home') {
       this.setState({ isSignedIn: true })
     }
@@ -136,10 +140,12 @@ class App extends Component {
               }// end user
             }) // end setState
           }) // end .then
+          .catch(error => {
+            console.log(`error get response from server`, error)
+          })
         }
         this.displayFaceBox(this.calculateFaceLocation(response))
       }) // .then
-      
       .catch(err => {
         // there was an error
         console.log(err)
@@ -174,7 +180,7 @@ class App extends Component {
               onPictureSubmit={this.onPictureSubmit}
             />
             <FaceRecognition
-              Image={input}
+              Image={imageUrl}
               Box={box}
             />
           </div>
