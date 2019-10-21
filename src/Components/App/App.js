@@ -49,8 +49,6 @@ const initialState =  {
 
 class App extends Component {
 
-  
-
   state = initialState;
 
   // Takes data from API sets each value to a variable.
@@ -58,8 +56,9 @@ class App extends Component {
   // mathematical decides which value will postion itself around the face.
   // and returns values for css to display border around face.
   calculateFaceLocation = (data) => {
-    console.log('in face location')
-    const face = data.outputs[0].data.regions[0].region_info.bounding_box
+    console.log('in face location', data)
+    const face = data.data.outputs[0].data.regions[0].region_info.bounding_box
+    console.log(' this is face variable', face);
     const image = document.getElementById('inputImage')
     const width = Number(image.width)
     const height = Number(image.height)
@@ -124,13 +123,12 @@ class App extends Component {
       imageUrl: this.state.input
     })
 
-    app.models.predict(
-      Clarifai.FACE_DETECT_MODEL,
-      this.state.input)
+      Axios.post('/image/apiCall', this.state)
       .then(response => {
         //console.log(response.outputs[0].data.regions[0].region_info.bounding_box);
         if(response) {
-          console.log( this.state.user.id )
+
+          console.log(response)
           Axios.put('/image',  this.state.user )
           .then( response => {
             this.setState({

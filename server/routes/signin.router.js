@@ -6,6 +6,11 @@ const bcrypt = require('bcrypt-nodejs');
 router.post('/', (req, res) => {
   console.log('in router.post /signin', req.body)
   const { password, email } = req.body
+
+  if( !email || !password ) {
+    return res.send.json(`Error user not found`);
+  }
+
   knex.select('email', 'password')
     .from('login')
     .where('email', '=', email)

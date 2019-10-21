@@ -11,6 +11,9 @@ router.post('/', (req, res) => {
   // run transaction function which inserts password and email into 
   // table then returns email to insert into login table.
   // if one fails, it all fails. 
+  if( !email || !password || !name ) {
+    return res.send.json(`Error user not found`);
+  }
   knex.transaction(trx => {
     trx.insert({
       password: hash,
