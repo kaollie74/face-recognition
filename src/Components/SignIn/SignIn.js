@@ -21,27 +21,30 @@ class SignIn extends Component {
   }
 
   onSubmitSignIn = () => {
+    console.log('in onSubmitSignIn')
+    const { email, password } = this.state;
+    if (email && password) {
+      Axios.post('/signin', this.state)
+        .then(response => {
+          console.log(response.data);
+          if (response.data.id) {
+            this.props.loadUser(response.data)
+            this.props.onRouteChange('home');
 
-    // SHORTER VERSION OF AXIOS POST
-    Axios.post('/signin', this.state)
-      .then(response => {
-        console.log(response.data);
-        if (response.data.id ) {
+          } else if (response.data === 'error logging in') {
+            alert('email or password is incorrect, try again')
+            this.setState({
+              email: '',
+              password: '',
+            }) // end setState
+          } // end else if
 
-          this.props.loadUser(response.data)
-          this.props.onRouteChange('home');
+        }) // end .then
+    } else if (!email && !password) {
+      alert(`Email and Password must be filled in`)
+    } // end else if
 
-        } else if (response.data === 'error logging in') {
-          alert('email or password is incorrect, try again')
-          this.setState({
-            email: '',
-            password: '',
-          })
-        }
-
-      })
-  
-  }
+  } // end onSubmitSignIn
 
   render() {
 
