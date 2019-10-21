@@ -13,9 +13,14 @@ const FaceReognition = ({ Image, Box }) => {
           height='auto'
           
         />
+         {Image  ?
         <div className='boundry-box' style={{ top: Box.topRow, right: Box.rightCol, bottom: Box.bottomRow, left: Box.leftCol}}>
 
         </div>
+        :
+        <>
+        </>
+         }
       </div>
     </div>
   )
