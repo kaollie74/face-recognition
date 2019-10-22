@@ -118,6 +118,14 @@ class App extends Component {
 
   }// end onRouteChange
 
+  // on submit, run Axios.post to image/apicall with this.state.
+  // once response comes back from server, then run an Axios.put
+  // to /image with this.state.user object.
+  // When response comes back from the server, update state with the 
+  // data which is the total count of entries. 
+  // Also the response that comes back from the /image/apiCall pass that data
+  // into the this.displayFaceBox(this.calculateFaceLocation(response)) in order
+  // to get the dimensions for the CSS box that goes around the face. 
   onPictureSubmit = () => {
     this.setState({
       imageUrl: this.state.input

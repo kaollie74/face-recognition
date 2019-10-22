@@ -22,7 +22,7 @@ app.use('/signin', signinRouter);
 app.use('/register', registerRouter);
 app.use('/image', imageRouter);
 
-
+console.log('this is process.env', process.env)
 
 
 // server is listening on localhost: 5000
