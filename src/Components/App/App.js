@@ -12,11 +12,11 @@ import './App.css';
 import Axios from 'axios';
 
 
-require('dotenv').config();
-const API_KEY = process.env.REACT_APP_IMAGE
-const app = new Clarifai.App({
-  apiKey: API_KEY
-});
+// require('dotenv').config();
+// // const API_KEY = process.env.REACT_APP_IMAGE
+// // const app = new Clarifai.App({
+// //   apiKey: API_KEY
+// // });
 
 const particlesOptions = {
   particles: {
