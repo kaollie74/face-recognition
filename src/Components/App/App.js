@@ -10,13 +10,6 @@ import Register from '../Register/Register';
 import './App.css';
 import Axios from 'axios';
 
-
-// require('dotenv').config();
-// // const API_KEY = process.env.REACT_APP_IMAGE
-// // const app = new Clarifai.App({
-// //   apiKey: API_KEY
-// // });
-
 const particlesOptions = {
   particles: {
     number: {
@@ -138,10 +131,11 @@ class App extends Component {
           console.log(response)
           Axios.put('/image',  this.state.user )
           .then( response => {
+            //console.log('back from /image route', response)
             this.setState({
               user : {
                 ...this.state.user,
-                entries: response.data,
+                entries: response.data.entries,
               }// end user
             }) // end setState
           }) // end .then
