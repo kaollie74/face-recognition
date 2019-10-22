@@ -2,7 +2,7 @@
 knex = require('knex')({
   client: 'pg',
   connection: {
-    host : 'process.env.DATABASE_URL || 127.0.0.1',
+    host : process.env.DATABASE_URL || '127.0.0.1',
     ssl: true,
     user : 'kyleolson87',
     password : 'your_database_password',
