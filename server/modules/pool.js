@@ -1,14 +1,22 @@
 
-knex = require('knex')({
+const knex = require('knex')({
   client: 'pg',
   connection: {
-    host : process.env.DATABASE_URL || '127.0.0.1',
+    connectionString : process.env.DATABASE_URL,
     ssl: true,
-    user : 'kyleolson87',
-    password : 'your_database_password',
-    database : 'smart-brain'
   }
 });
+
+
+// const knex = require('knex')({
+//   client: 'pg',
+//   connection: {
+//     host : '127.0.0.1',
+//     user : 'kyleolson87',
+//     password : 'your_database_password',
+//     database : 'smart-brain'
+//   }
+// });
 
 module.exports = knex;
 
