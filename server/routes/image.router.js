@@ -5,7 +5,7 @@ const bcrypt = require('bcrypt-nodejs');
 const Clarifai = require('clarifai');
 
 require('dotenv').config();
-const API_KEY = process.env.REACT_APP_IMAGE
+const API_KEY = process.env.IMAGE
 const app = new Clarifai.App({
   apiKey: API_KEY
 });
