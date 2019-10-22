@@ -2,7 +2,8 @@
 knex = require('knex')({
   client: 'pg',
   connection: {
-    host : 'postgresql-shallow-13980',
+    host : 'process.env.DATABASE_URL || 127.0.0.1',
+    ssl: true,
     user : 'kyleolson87',
     password : 'your_database_password',
     database : 'smart-brain'
