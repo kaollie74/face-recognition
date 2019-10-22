@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import Particles from 'react-particles-js'
-import Clarifai from 'clarifai';
 import Navigation from '../Navigation/Navigation';
 import Logo from '../Logo/Logo';
 import ImageLinkForm from '../ImageLinkForm/ImageLinkForm';
@@ -161,7 +160,7 @@ class App extends Component {
 
   render() {
     console.log('this is state in App.js', this.state)
-    const { isSignedIn, imageUrl, route, box, input} = this.state;
+    const { isSignedIn, imageUrl, route, box} = this.state;
 
     return (
 

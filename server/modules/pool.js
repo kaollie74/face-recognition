@@ -33,9 +33,7 @@ if (process.env.DATABASE_URL) {
    
   client: 'pg',
   connection: {
-    host : '127.0.0.1',
-    user : 'kyleolson87',
-    password : 'your_database_password',
+    host : 'localhost',
     database : 'smart-brain'
   }
   };
